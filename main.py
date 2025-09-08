@@ -6,6 +6,8 @@ import sys, requests, json
 from ui import *
 from api_request import *
 from paket_xut import get_package_xut
+from paket_xcp import get_package_xcp
+from paket_unl import get_package_unl
 from my_package import fetch_my_packages
 from paket_custom_family import get_packages_by_family
 from auth_helper import AuthInstance
@@ -40,6 +42,16 @@ def main():
                 
                 show_package_menu(packages)
             elif choice == "4":
+                # XUT 
+                packages = get_package_xcp()
+                
+                show_package_menu(packages)
+            elif choice == "5":
+                # XUT 
+                packages = get_package_unl()
+                
+                show_package_menu(packages)
+            elif choice == "6":
                 family_code = input("Enter family code (or '99' to cancel): ")
                 if family_code == "99":
                     continue
