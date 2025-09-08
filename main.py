@@ -56,6 +56,11 @@ def main():
                 if family_code == "99":
                     continue
                 get_packages_by_family(family_code)
+            elif choice == "7":
+                family_code = input("Enter family code (or '99' to cancel): ")
+                if family_code == "99":
+                    continue
+                get_packages_by_family(family_code, is_enterprise=True)
             elif choice == "99":
                 print("Exiting the application.")
                 sys.exit(0)
