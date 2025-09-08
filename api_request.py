@@ -1,7 +1,7 @@
 import os, json, uuid, requests, time
 from datetime import datetime, timezone, timedelta
 
-from crypto_helper import encryptsign_xdata, java_like_timestamp, ts_gmt7_without_colon, ax_api_signature, decrypt_xdata, API_KEY, get_x_signature_payment, build_encrypted_field
+from crypto_helper import encryptsign_xdata, java_like_timestamp, ts_gmt7_without_colon, ax_api_signature, decrypt_xdata, API_KEY, get_x_signature_payment, build_encrypted_field, load_ax_fp
 
 BASE_API_URL = os.getenv("BASE_API_URL")
 BASE_CIAM_URL = os.getenv("BASE_CIAM_URL")
@@ -11,7 +11,7 @@ if not BASE_API_URL or not BASE_CIAM_URL:
 GET_OTP_URL = BASE_CIAM_URL + "/realms/xl-ciam/auth/otp"
 BASIC_AUTH = os.getenv("BASIC_AUTH")
 AX_DEVICE_ID = os.getenv("AX_DEVICE_ID")
-AX_FP = os.getenv("AX_FP")
+AX_FP = load_ax_fp()
 SUBMIT_OTP_URL = BASE_CIAM_URL + "/realms/xl-ciam/protocol/openid-connect/token"
 UA = os.getenv("UA")
 
@@ -255,7 +255,7 @@ def get_balance(api_key: str, id_token: str) -> dict:
         print("Error getting balance:", res.get("error", "Unknown error"))
         return None
     
-def get_family(api_key: str, tokens: dict, family_code: str) -> dict:
+def get_family(api_key: str, tokens: dict, family_code: str, is_enterprise: bool = False) -> dict:
     print("Fetching package family...")
     path = "api/v8/xl-stores/options/list"
     id_token = tokens.get("id_token")
@@ -266,7 +266,7 @@ def get_family(api_key: str, tokens: dict, family_code: str) -> dict:
         "migration_type": "NONE",
         "package_family_code": family_code,
         "is_autobuy": False,
-        "is_enterprise": False,
+        "is_enterprise": is_enterprise,
         "is_pdlp": True,
         "referral_code": "",
         "is_migration": False,
